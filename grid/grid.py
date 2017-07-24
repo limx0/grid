@@ -3,6 +3,8 @@ import os
 import time
 import subprocess
 from selenium.webdriver import Remote
+from retrying import retry
+
 
 COMPOSE_FILE = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docker-compose.yml')
 
@@ -33,8 +35,13 @@ class SeleniumGrid:
         pass
 
 
+@retry(stop_max_attempt_number=10, wait_fixed=500)
+def connect_to_grid():
+    return Remote('http://127.0.0.1:4444/wd/hub', desired_capabilities={'browserName': 'chrome'})
+
+
 def grid_request(url, extra_sleep=None):
-    driver = Remote('http://127.0.0.1:4444/wd/hub', desired_capabilities={'browserName': 'chrome'})
+    driver = connect_to_grid()
     driver.get(url)
     if extra_sleep:
         time.sleep(extra_sleep)
