@@ -6,8 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
-#IDE Folders
+# IDE Folders
 .idea/
+
+# Jupyter notebooks
+*.ipynb
 
 # Distribution / packaging
 .Python
