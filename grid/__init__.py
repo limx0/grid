@@ -1,2 +1,2 @@
 
-from .grid import start_grid, stop_grid, SeleniumGrid, grid_request
+from .grid import Grid, grid_request

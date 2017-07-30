@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="grid",
-    packages=["grid"],
+    packages=['grid'],
     version='0.0.1',
     description="Function and compose file to start a Selenium grid",
     author="Bradley McElroy",
@@ -11,4 +11,4 @@ setup(
     url="https://github.com/limx0/grid",
     include_package_data=True,
     install_requires=['retrying', 'docker'],
-    )
+)
