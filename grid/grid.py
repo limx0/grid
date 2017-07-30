@@ -6,7 +6,7 @@ from selenium.webdriver import Remote
 from retrying import retry
 
 
-class Grid:
+class SeleniumGrid:
 
     _compose_binary = None
     _compose_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docker-compose.yml')
@@ -17,10 +17,7 @@ class Grid:
         self.shutdown_on_exit = shutdown_on_exit
 
     def __enter__(self):
-        try:
-            self.start_grid(self.num_nodes)
-        except Exception as e:
-            print(e, 'ere')
+        self.start_grid(self.num_nodes)
 
     def __exit__(self, *args):
         if self.shutdown_on_exit:
@@ -29,7 +26,10 @@ class Grid:
     @property
     def compose_binary(self):
         if self._compose_binary is None:
-            self._compose_binary = subprocess.check_output('which docker-compose', shell=True).decode().strip()
+            if 'DOCKER_COMPOSE_BIN' in os.environ:
+                self._compose_binary = os.environ['DOCKER_COMPOSE_BIN']
+            else:
+                self._compose_binary = 'docker-compose'
         return self._compose_binary
 
     def compose_call(self, command):

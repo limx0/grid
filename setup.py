@@ -10,5 +10,5 @@ setup(
     author_email="bradley.mcelroy@live.com",
     url="https://github.com/limx0/grid",
     include_package_data=True,
-    install_requires=['retrying', 'docker'],
+    install_requires=['retrying', 'docker', 'selenium'],
 )

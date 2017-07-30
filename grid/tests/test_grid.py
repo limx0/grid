@@ -1,30 +1,22 @@
 
 import docker
-from grid import Grid, grid_request
+from operator import attrgetter
+from grid import SeleniumGrid, grid_request
 
 client = docker.from_env()
 
 
-def test_compose_binary():
-    g = Grid()
-    assert g.compose_binary.endswith('/bin/docker-compose')
-
-
-def test_grid_start():
-    with Grid():
-        container_names = [c.name for c in client.containers.list()]
-        assert all(x in container_names for x in ['hub'] + ['grid_chrome_%s' % i for i in range(1, 4)])
-
-
-def test_grid_stop():
-    with Grid(shutdown_on_exit=True):
-        container_names = [c.name for c in client.containers.list()]
-    assert not any(x in container_names for x in ['hub'] + ['grid_chrome_%s' % i for i in range(1, 4)])
+def test_grid_start_and_stop():
+    n_nodes = 2
+    list_names = ['hub'] + ['grid_chrome_%s' % i for i in range(1, n_nodes + 1)]
+    with SeleniumGrid(num_nodes=n_nodes, shutdown_on_exit=True):
+        assert all(name in map(attrgetter('name'), client.containers.list()) for name in list_names)
+    assert not any(name in map(attrgetter('name'), client.containers.list()) for name in list_names)
 
 
 def test_context_mgr():
     url = 'https://www.google.com'
     n_nodes = 1
-    with Grid(num_nodes=n_nodes):
+    with SeleniumGrid(num_nodes=n_nodes):
         resps = [grid_request(url) for _ in range(n_nodes)]
     assert resps
