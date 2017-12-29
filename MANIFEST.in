@@ -1,2 +1,3 @@
-
-include grid/docker-compose.yml
+include requirements.txt
+include test-requirements.txt
+include cirrus.conf
