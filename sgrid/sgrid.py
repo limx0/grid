@@ -2,8 +2,8 @@
 import os
 import time
 import subprocess
-from selenium.webdriver import Remote
-from retrying import retry
+from selenium import webdriver
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class SeleniumGrid:
@@ -37,21 +37,22 @@ class SeleniumGrid:
             '{compose_binary} -f {compose_file} {command}'
             .format(compose_binary=self.compose_binary, compose_file=self._compose_file, command=command)
         )
-        return subprocess.check_output(cmd, shell=True)
+        return subprocess.check_output(cmd.split(' '))
 
     def start_grid(self, num_nodes=1):
         print('Starting grid with %s nodes' % num_nodes)
         self.compose_call('up -d --scale chrome={num_nodes}'.format(num_nodes=num_nodes))
-        print(subprocess.check_output('docker ps', shell=True).decode('UTF-8'))
 
     def stop_grid(self):
         print('Stopping grid')
         self.compose_call('down')
 
 
-@retry(stop_max_attempt_number=10, wait_fixed=500)
 def get_remote_grid_driver():
-    return Remote('http://127.0.0.1:4444/wd/hub', desired_capabilities={'browserName': 'chrome'})
+    return webdriver.Remote(
+        command_executor='http://localhost:4444/wd/hub',
+        desired_capabilities=DesiredCapabilities.CHROME
+    )
 
 
 def grid_request(url, extra_sleep=None):

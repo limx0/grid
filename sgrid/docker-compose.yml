@@ -4,14 +4,16 @@ version: '2'
 services:
   hub:
     container_name: hub
-    image: selenium/hub:3.4.0
+    image: selenium/hub
     ports:
-      - "4444:4444" # HOST:CONTAINER
+      - 4444:4444
     expose:
-      - "4444"
+      - 4444
 
   chrome:
-    image: selenium/node-chrome:3.4.0
+    image: selenium/node-chrome
     environment:
       - HUB_PORT_4444_TCP_ADDR=hub
       - HUB_PORT_4444_TCP_PORT=4444
+    volumes:
+      - /dev/shm:/dev/shm
