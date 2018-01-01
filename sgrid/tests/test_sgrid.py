@@ -1,5 +1,5 @@
 
-from sgrid import SeleniumGrid, grid_request
+from sgrid import SeleniumGrid, SeleniumNode, grid_request
 
 
 def test_grid_start_and_stop(client):
@@ -15,3 +15,9 @@ def test_grid_start_and_stop(client):
 def test_context_mgr(single_grid):
     resp = grid_request('https://www.google.com')
     assert resp
+
+
+def test_selenium_node():
+    with SeleniumNode() as node:
+        node.driver.get('https://www.google.com')
+        assert 'https://www.google.com' in node.driver.page_source
