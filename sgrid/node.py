@@ -13,7 +13,6 @@ class SeleniumNode:
         self.container = None
 
     def __enter__(self):
-        print('Starting %s node' % self.image)
         self.container = self.client.containers.run(self.image, ports={4444: None}, detach=True, shm_size='2g')
         addr = self.client.api.inspect_container(self.container.id)['NetworkSettings']['Ports']['4444/tcp']
         self.addr = '%s:%s' % (addr[0]['HostIp'], addr[0]['HostPort'])
