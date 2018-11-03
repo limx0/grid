@@ -7,6 +7,7 @@ projects managed with cirrus.
 
 """
 import setuptools
+
 try:
     import ConfigParser as configparser
 except ImportError:
@@ -42,26 +43,27 @@ requirements_file = open(requirements_filename)
 # Furthermore, you can't use line continuations with the following:
 requirements = requirements_file.read().strip().split('\n')
 
-setup_args ={
+setup_args = {
     'description': parser.get('package', 'description'),
     'include_package_data': True,
     'install_requires': requirements,
     'name': parser.get('package', 'name'),
+    'package_data': {'sgrid': ['docker-compose.yml']},
     'version': parser.get('package', 'version'),
     'url': get_default(parser, 'package', 'url', None),
-    'author': get_default(parser, 'package','author', None),
-    'author_email': get_default(parser, 'package','author_email', None)
+    'author': get_default(parser, 'package', 'author', None),
+    'author_email': get_default(parser, 'package', 'author_email', None)
 }
 
 if parser.has_section('console_scripts'):
     scripts = [
-        '{0} = {1}'.format(opt,  parser.get('console_scripts', opt))
+        '{0} = {1}'.format(opt, parser.get('console_scripts', opt))
         for opt in parser.options('console_scripts')
     ]
-    setup_args['entry_points'] = {'console_scripts' : scripts}
+    setup_args['entry_points'] = {'console_scripts': scripts}
 
 if src_dir:
     setup_args['packages'] = setuptools.find_packages(src_dir, exclude=excl_dirs)
     setup_args['provides'] = setuptools.find_packages(src_dir)
-    setup_args['package_dir'] = {'':src_dir}
+    setup_args['package_dir'] = {'': src_dir}
 setuptools.setup(**setup_args)
