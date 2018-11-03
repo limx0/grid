@@ -48,7 +48,7 @@ setup_args = {
     'include_package_data': True,
     'install_requires': requirements,
     'name': parser.get('package', 'name'),
-    'package_data': {'sgrid': 'docker-compose.yml'},
+    'package_data': {'sgrid': ['docker-compose.yml']},
     'version': parser.get('package', 'version'),
     'url': get_default(parser, 'package', 'url', None),
     'author': get_default(parser, 'package', 'author', None),
