@@ -3,13 +3,19 @@ from sgrid import SeleniumGrid, SeleniumNode, grid_request
 
 
 def test_grid_start_and_stop(client):
-    required = ['hub', 'sgrid_chrome_1', 'sgrid_chrome_2']
-    with SeleniumGrid(num_nodes=2, shutdown_on_exit=True):
-        container_names = [c.name for c in client.containers.list()]
-        assert all(name in container_names for name in required)
 
-    container_names = [c.name for c in client.containers.list()]
-    assert not any(name in container_names for name in required)
+    def container_exists(name):
+        return any(c.name.startswith(name) for c in client.containers.list())
+
+    required = [
+        'hub',
+        'sgrid_chrome_1',
+        'sgrid_chrome_2'
+    ]
+    with SeleniumGrid(num_nodes=2, shutdown_on_exit=True):
+        assert all(map(container_exists, required))
+
+    assert not any(map(container_exists, required))
 
 
 def test_context_mgr(single_grid):

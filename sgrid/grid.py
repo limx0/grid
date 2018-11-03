@@ -18,6 +18,7 @@ class SeleniumGrid:
 
     def __enter__(self):
         self.start_grid(self.num_nodes)
+        return self
 
     def __exit__(self, *args):
         if self.shutdown_on_exit:
