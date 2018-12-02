@@ -10,6 +10,7 @@ from sgrid.util import ping_service
 class SeleniumGrid:
 
     HUB_URL = 'http://localhost:4444/wd/hub'
+    API_URL = 'http://localhost:4444/grid/api/hub'
     _compose_binary = None
     _compose_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docker-compose.yml')
 
@@ -20,7 +21,6 @@ class SeleniumGrid:
 
     def __enter__(self):
         self.start_grid(self.num_nodes)
-        ping_service(url=self.HUB_URL)
         return self
 
     def __exit__(self, *args):
@@ -46,6 +46,8 @@ class SeleniumGrid:
     def start_grid(self, num_nodes=1):
         print('Starting grid with %s nodes' % num_nodes)
         self.compose_call('up -d --scale chrome={num_nodes}'.format(num_nodes=num_nodes))
+        ping_service(url=self.HUB_URL)
+        ping_service(url=self.API_URL, condition=lambda resp: int(resp.json()['slotCounts']['total']) == num_nodes)
 
     def stop_grid(self):
         print('Stopping grid')
