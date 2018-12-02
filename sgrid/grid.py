@@ -4,10 +4,12 @@ import time
 import subprocess
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from sgrid.util import ping_service
 
 
 class SeleniumGrid:
 
+    HUB_URL = 'http://localhost:4444/wd/hub'
     _compose_binary = None
     _compose_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'docker-compose.yml')
 
@@ -18,6 +20,7 @@ class SeleniumGrid:
 
     def __enter__(self):
         self.start_grid(self.num_nodes)
+        ping_service(url=self.HUB_URL)
         return self
 
     def __exit__(self, *args):
@@ -51,7 +54,7 @@ class SeleniumGrid:
 
 def get_remote_grid_driver():
     return webdriver.Remote(
-        command_executor='http://localhost:4444/wd/hub',
+        command_executor=SeleniumGrid.HUB_URL,
         desired_capabilities=DesiredCapabilities.CHROME
     )
 
