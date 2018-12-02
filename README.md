@@ -1,11 +1,11 @@
-# grid
+# sgrid
 
 Python class / context manager for starting a headless [Seleneium Grid][1].
 
 Useful for making distributed requests that require a browser, without requiring a GUI. 
 
 ```python-docs
->>> from grid import SeleniumGrid
+>>> from sgrid import SeleniumGrid, grid_request
 >>> from multiprocessing import Threadpool
 >>> links = ['https://www.google.com', ... , 'https://www.yahoo.com']
 
