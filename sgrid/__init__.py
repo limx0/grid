@@ -1,4 +1,4 @@
 from .grid import SeleniumGrid, grid_request
 from .node import SeleniumNode
 
-__version__ = "0.0.6"
+__version__ = "0.0.7"
