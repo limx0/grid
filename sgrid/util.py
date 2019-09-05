@@ -15,5 +15,5 @@ def ping_service(url, retries=10, sleep=1, condition=None):
                     raise AssertionError
             return True
         except:
-            logger.info('Waiting for service %s' % url)
+            logger.info("Waiting for service %s" % url)
             time.sleep(sleep)
