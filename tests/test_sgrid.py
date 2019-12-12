@@ -41,3 +41,9 @@ def test_proxy(proxy):
         ip_addr_proxy = node.get_json('https://ifconfig.me/all.json')['ip_addr']
 
     assert ip_addr_proxy == proxy['http'].split(':')[0]
+
+
+def test_error_request():
+    with SeleniumNode() as node:
+        node.get_page_source('https://httpbin.org/status/429')
+        assert 'https://www.google.com' in node.driver.page_source

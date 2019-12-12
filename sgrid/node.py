@@ -1,6 +1,6 @@
 import docker
-from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from seleniumwire import webdriver
 
 from sgrid.core import RequestBase
 from sgrid.util import ping_service
